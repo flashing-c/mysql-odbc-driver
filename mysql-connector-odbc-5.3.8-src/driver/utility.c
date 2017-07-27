@@ -699,8 +699,17 @@ convert_to_out:
       used_chars+= 1;
       used_bytes+= stmt->getdata.latest_bytes;
 
+/* Modified by wangyue 2017-07-18 
+	解决“转码”+“截断”情况下，指向原始数据的指针偏移错误，导致获取数据错误问题*/
+#if 0
       src+= stmt->getdata.latest_bytes;
       stmt->getdata.source+= stmt->getdata.latest_bytes;
+#else
+      src+= cnvres;
+      stmt->getdata.source+= cnvres;
+#endif
+/* End by wangyue 2017-07-18 */
+	    
     }
     else if (stmt->getdata.latest_bytes == MY_CS_ILUNI && wc != '?')
     {
